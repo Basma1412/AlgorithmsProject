@@ -183,13 +183,15 @@ class WorkingArea {
                 if (nodes.get(i).inRange(nodes.get(j))) {
                     Edge temp = new Edge(nodes.get(i), nodes.get(j));
                     nodes.get(i).addNeighbor(temp);
+                    Route bestRoute=bestRoute(nodes.get(i), nodes.get(j).id);
+                    nodes.get(i).addNeighborNode(new Neighbor(nodes.get(j),bestRoute));
                 }
 
             }
         }
     }
 
-    public Route bestRoute(Node node, Message message) {
+    public Route bestRoute(Node node, int id) {
         Stack<Node> route = new Stack<Node>();
         double temp_power=0;
         double route_power = 1000000;
@@ -208,7 +210,7 @@ class WorkingArea {
                     temp_power+=neighbours.get(i).getPower();
                     route.add(n);
                     n.visited = true;
-                    if (n.id==message.receiver_id)
+                    if (n.id==id)
                     {
                         break;
                     }
@@ -227,6 +229,42 @@ class WorkingArea {
 
     }
 }
+
+
+
+class Neighbor{
+    Route route;
+    Node node;
+    
+    public Neighbor(Node node,Route route)
+    {
+        this.node=node;
+        this.route=route;
+    }
+    
+    public Route getRoute()
+    {
+        return this.route;
+    }
+    
+    
+    public Node getNode()
+    {
+        return this.node;
+    }
+    
+    
+    public void setRoute(Route route)
+    {
+         this.route=route;
+    }
+    
+    public void getNode(Node node)
+    {
+         this.node=node;
+    }
+}
+
 
 class Route
 {
@@ -384,6 +422,7 @@ class Edge {
 class Node {
 
     private ArrayList<Edge> neighborhood;
+    private ArrayList<Neighbor> neighbors;
     private String label;
     int id;
     Location location;
@@ -398,6 +437,7 @@ class Node {
     public Node(String label) {
         this.label = label;
         this.neighborhood = new ArrayList<>();
+        this.neighbors = new ArrayList<>();
     }
 
     public Node(String label, int id, Location location, double batteryPower, double antennaPower, boolean visited) {
@@ -477,6 +517,16 @@ class Node {
         this.neighborhood.add(edge);
     }
 
+    
+    
+      public void addNeighborNode(Neighbor neighbor) {
+        if (this.neighbors.contains(neighbor)) {
+            return;
+        }
+
+        this.neighbors.add(neighbor);
+    }
+    
     /**
      *
      * @param other The edge for which to search
@@ -484,6 +534,10 @@ class Node {
      */
     public boolean containsNeighbor(Edge other) {
         return this.neighborhood.contains(other);
+    }
+    
+        public boolean containsNeighborNode(Node other) {
+        return this.neighbors.contains(other);
     }
 
     /**
@@ -494,6 +548,10 @@ class Node {
     public Edge getNeighbor(int index) {
         return this.neighborhood.get(index);
     }
+    
+      public Neighbor getNeighborNode(int index) {
+        return this.neighbors.get(index);
+    }
 
     /**
      *
@@ -503,6 +561,10 @@ class Node {
     Edge removeNeighbor(int index) {
         return this.neighborhood.remove(index);
     }
+    
+       Neighbor removeNeighborNode(int index) {
+        return this.neighbors.remove(index);
+    }
 
     /**
      *
@@ -510,6 +572,10 @@ class Node {
      */
     public void removeNeighbor(Edge e) {
         this.neighborhood.remove(e);
+    }
+    
+      public void removeNeighborNode(Neighbor e) {
+        this.neighbors.remove(e);
     }
 
     /**
@@ -520,6 +586,9 @@ class Node {
         return this.neighborhood.size();
     }
 
+       public int getNeighborNodesCount() {
+        return this.neighbors.size();
+    }
     /**
      *
      * @return String The label of this Node
@@ -568,6 +637,9 @@ class Node {
         return new ArrayList<Edge>(this.neighborhood);
     }
 
+      public ArrayList<Neighbor> getAllNeighbors() {
+        return new ArrayList<Neighbor>(this.neighbors);
+    }
 }
 
 class Location {
