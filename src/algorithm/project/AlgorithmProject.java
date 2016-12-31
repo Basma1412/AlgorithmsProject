@@ -188,7 +188,7 @@ class WorkingArea {
         }
     }
 
-    public void bestRoute(Node node, Message message) {
+    public Route bestRoute(Node node, Message message) {
         Stack<Node> route = new Stack<Node>();
         double temp_power=0;
         double route_power = 1000000;
@@ -220,6 +220,9 @@ class WorkingArea {
                 route_power=temp_power;
             }
         }
+        
+        Route path=new Route(final_route,route_power);
+        return path;
 
     }
 }
