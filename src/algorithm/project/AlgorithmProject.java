@@ -16,7 +16,6 @@ class WorkingArea {
         this.edges = new HashMap<Integer, Edge>();
     }
     
-    /*hello I am tasneem */
 
     /**
      * This constructor accepts an ArrayList<Vertex> and populates this.nodes.
