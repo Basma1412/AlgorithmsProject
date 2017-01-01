@@ -354,18 +354,6 @@ class Edge {
     }
 
     /**
-     * Note that the compareTo() method deviates from the specifications in the
-     * Comparable interface. A return value of 0 does not indicate that
-     * this.equals(other). The equals() method checks the Node endpoints, while
-     * the compareTo() is used to compare Edge weights
-     *
-     * @param other The Edge to compare against this
-     * @return int this.power - other.power
-     */
-//    public double compareTo(Edge other) {
-//        return this.power - other.power;
-//    }
-    /**
      *
      * @return String A String representation of this Edge
      */
@@ -523,6 +511,17 @@ class Node {
 
     public void send(Message msg) {
 
+        Route messagepath=findDestination_Neighbors(this.getAllNeighbors(),msg.receiver_id);
+        if (messagepath!=null)
+        {
+            Node receiver = messagepath.route.pop();
+            receiver.receive(msg, messagepath);
+        }
+        else 
+        {
+            System.out.println(" Message was lost");
+        }
+        
     }
 
     public void receive(Message msg,Route route) {
