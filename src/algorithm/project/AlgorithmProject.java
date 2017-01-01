@@ -449,6 +449,10 @@ class Node {
         this.antennaPower = antennaPower;
     }
 
+    public int getNodeID(){
+    
+    return id;
+    }
     public Location getLocation() {
         return this.location;
     }
@@ -474,6 +478,46 @@ class Node {
         return distance <= 20;
 
     }
+    
+    public Route findDestination_Neighbors(ArrayList<Neighbor> neighbors,int destination_id){
+  /*     int s=0;
+        int e=neighbors.size()-1;
+        while(s<=e){
+             int m=neighbors.size()/2;
+        if(neighbors.get(m).getNode().getNodeID()==destination_id){
+        return neighbors.get(id).getRoute();
+        
+        }
+        else if(destination_id  < neighbors.get(m).getNode().getNodeID()){
+            e=m-1;
+        
+        } 
+        else {
+        s=m+1;
+        }
+        }*/
+        
+    for (int i=0;i<neighbors.size();i++){
+    if(neighbors.get(i).getNode().getNodeID()==destination_id){
+        return neighbors.get(i).getRoute();
+    }
+    
+    }
+    
+    return null;
+    }
+    
+    
+    public Route findDestination(int destination_id){
+    if(findDestination_Neighbors(this.neighbors,destination_id)==null){
+     for(int i=0;i<neighbors.size();i++){
+        return  findDestination_Neighbors(neighbors.get(i).getNode().get_Neighbors(),destination_id);
+     
+     }    
+    
+    }
+    return null;
+    }
 
     public void broadcast(Message msg) {
         if (this.batteryPower > 0) {
@@ -485,6 +529,8 @@ class Node {
     }
 
     public void forward(Message msg) {
+    
+    
     }
 
     public void send(Message msg) {
@@ -636,10 +682,13 @@ class Node {
     public ArrayList<Edge> getNeighbors() {
         return new ArrayList<Edge>(this.neighborhood);
     }
-
+ public ArrayList<Neighbor> get_Neighbors() {
+        return this.neighbors;
+    }
       public ArrayList<Neighbor> getAllNeighbors() {
         return new ArrayList<Neighbor>(this.neighbors);
     }
+         
 }
 
 class Location {
