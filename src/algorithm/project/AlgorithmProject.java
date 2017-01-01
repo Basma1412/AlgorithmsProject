@@ -15,7 +15,6 @@ class WorkingArea {
         this.nodes = new HashMap<String, Node>();
         this.edges = new HashMap<Integer, Edge>();
     }
-    
 
     /**
      * This constructor accepts an ArrayList<Vertex> and populates this.nodes.
@@ -183,8 +182,8 @@ class WorkingArea {
                 if (nodes.get(i).inRange(nodes.get(j))) {
                     Edge temp = new Edge(nodes.get(i), nodes.get(j));
                     nodes.get(i).addNeighbor(temp);
-                    Route bestRoute=bestRoute(nodes.get(i), nodes.get(j).id);
-                    nodes.get(i).addNeighborNode(new Neighbor(nodes.get(j),bestRoute));
+                    Route bestRoute = bestRoute(nodes.get(i), nodes.get(j).id);
+                    nodes.get(i).addNeighborNode(new Neighbor(nodes.get(j), bestRoute));
                 }
 
             }
@@ -193,109 +192,92 @@ class WorkingArea {
 
     public Route bestRoute(Node node, int id) {
         Stack<Node> route = new Stack<Node>();
-        double temp_power=0;
+        double temp_power = 0;
         double route_power = 1000000;
-        Stack<Node> final_route=new Stack<>();
+        Stack<Node> final_route = new Stack<>();
         route.add(node);
         node.visited = true;
         while (!route.isEmpty()) {
             Node element = route.pop();
-               
+
             ArrayList<Edge> neighbours = node.getNeighbors();
 
             for (int i = 0; i < neighbours.size(); i++) {
-                 temp_power=0;
+                temp_power = 0;
                 Node n = neighbours.get(i).getTwo();
                 if (n != null && !n.visited) {
-                    temp_power+=neighbours.get(i).getPower();
+                    temp_power += neighbours.get(i).getPower();
                     route.add(n);
                     n.visited = true;
-                    if (n.id==id)
-                    {
+                    if (n.id == id) {
                         break;
                     }
                 }
             }
-            
-            if (temp_power<route_power)
-            {
-                final_route=route;
-                route_power=temp_power;
+
+            if (temp_power < route_power) {
+                final_route = route;
+                route_power = temp_power;
             }
         }
-        
-        Route path=new Route(final_route,route_power);
+
+        Route path = new Route(final_route, route_power);
         return path;
 
     }
 }
 
+class Neighbor {
 
-
-class Neighbor{
     Route route;
     Node node;
-    
-    public Neighbor(Node node,Route route)
-    {
-        this.node=node;
-        this.route=route;
+
+    public Neighbor(Node node, Route route) {
+        this.node = node;
+        this.route = route;
     }
-    
-    public Route getRoute()
-    {
+
+    public Route getRoute() {
         return this.route;
     }
-    
-    
-    public Node getNode()
-    {
+
+    public Node getNode() {
         return this.node;
     }
-    
-    
-    public void setRoute(Route route)
-    {
-         this.route=route;
+
+    public void setRoute(Route route) {
+        this.route = route;
     }
-    
-    public void getNode(Node node)
-    {
-         this.node=node;
+
+    public void getNode(Node node) {
+        this.node = node;
     }
 }
 
+class Route {
 
-class Route
-{
     Stack<Node> route;
     double power;
-    
-    public Route(Stack<Node> route,double power)
-    {
-        this.route=route;
-        this.power=power;
+
+    public Route(Stack<Node> route, double power) {
+        this.route = route;
+        this.power = power;
     }
-    
-    public Stack<Node> getRoute()
-    {
+
+    public Stack<Node> getRoute() {
         return this.route;
     }
-    
-    public double getPower()
-    {
+
+    public double getPower() {
         return this.power;
     }
-    
-    public void setPower(double power)
-    {
-        this.power=power;
+
+    public void setPower(double power) {
+        this.power = power;
     }
-    
-    
-    public void setRoute( Stack<Node> route)
-    {
-        this.route=route;
+
+    public void setRoute(Stack<Node> route) {
+        this.route = route;
     }
 }
 
@@ -449,10 +431,11 @@ class Node {
         this.antennaPower = antennaPower;
     }
 
-    public int getNodeID(){
-    
-    return id;
+    public int getNodeID() {
+
+        return id;
     }
+
     public Location getLocation() {
         return this.location;
     }
@@ -478,56 +461,54 @@ class Node {
         return distance <= 20;
 
     }
-    
-    public Route findDestination_Neighbors(ArrayList<Neighbor> neighbors,int destination_id){
-  /*     int s=0;
-        int e=neighbors.size()-1;
-        while(s<=e){
-             int m=neighbors.size()/2;
-        if(neighbors.get(m).getNode().getNodeID()==destination_id){
-        return neighbors.get(id).getRoute();
-        
-        }
-        else if(destination_id  < neighbors.get(m).getNode().getNodeID()){
-            e=m-1;
-        
-        } 
-        else {
-        s=m+1;
-        }
-        }*/
-        
-    for (int i=0;i<neighbors.size();i++){
-    if(neighbors.get(i).getNode().getNodeID()==destination_id){
-        return neighbors.get(i).getRoute();
-    }
-    
-    }
-    
-    return null;
-    }
-    
-    
-    public Route findDestination(int destination_id){
-        
-        Route route=null;
-        
 
-        if(this.neighbors.size()==0){
-        route= null;
-        }else{
-          route=findDestination_Neighbors(this.neighbors,destination_id);
-    if(route==null){
+    public Route findDestination_Neighbors(ArrayList<Neighbor> neighbors, int destination_id) {
+        /*     int s=0;
+         int e=neighbors.size()-1;
+         while(s<=e){
+         int m=neighbors.size()/2;
+         if(neighbors.get(m).getNode().getNodeID()==destination_id){
+         return neighbors.get(id).getRoute();
         
-     for(int i=0;i<neighbors.size();i++){
-        route= findDestination_Neighbors(neighbors.get(i).getNode().get_Neighbors(),destination_id);
-     
-     }    
-    
-    }
+         }
+         else if(destination_id  < neighbors.get(m).getNode().getNodeID()){
+         e=m-1;
         
+         } 
+         else {
+         s=m+1;
+         }
+         }*/
+
+        for (int i = 0; i < neighbors.size(); i++) {
+            if (neighbors.get(i).getNode().getNodeID() == destination_id) {
+                return neighbors.get(i).getRoute();
+            }
+
         }
-    return route ;
+
+        return null;
+    }
+
+    public Route findDestination(int destination_id) {
+
+        Route route = null;
+
+        if (this.neighbors.size() == 0) {
+            route = null;
+        } else {
+            route = findDestination_Neighbors(this.neighbors, destination_id);
+            if (route == null) {
+
+                for (int i = 0; i < neighbors.size(); i++) {
+                    route = findDestination_Neighbors(neighbors.get(i).getNode().get_Neighbors(), destination_id);
+
+                }
+
+            }
+
+        }
+        return route;
     }
 
     public void broadcast(Message msg) {
@@ -539,24 +520,34 @@ class Node {
         }
     }
 
-    public void forward(Message msg) {
-    
-    }
 
     public void send(Message msg) {
 
     }
 
-    public void receive(Message msg) {
-        if (this.id == msg.receiver_id) {
-            confirmReceiving();
-        } else {
-            forward(msg);
+    public void receive(Message msg,Route route) {
+        
+        int myid=this.id;
+        double mypower=route.power;
+        ArrayList<Integer> ids=new ArrayList<>();
+        for (int i=0 ; i<route.route.size();i++)
+        {
+            ids.add(route.route.get(i).id);
         }
+        
+            acknowledge(myid,mypower,ids);
+        
     }
 
-    public void confirmReceiving() {
+    public void acknowledge(int myid,double mypower,ArrayList<Integer> ids) {
 
+        System.out.println("Received by"+myid+" , total power is : "+mypower+" and the path is ");
+        
+        for (int i =0 ; i<ids.size();i++)
+        {
+            System.out.print(ids.get(i)+" ,");   
+        }
+           System.out.print("End"); 
     }
 
     /**
@@ -573,16 +564,14 @@ class Node {
         this.neighborhood.add(edge);
     }
 
-    
-    
-      public void addNeighborNode(Neighbor neighbor) {
+    public void addNeighborNode(Neighbor neighbor) {
         if (this.neighbors.contains(neighbor)) {
             return;
         }
 
         this.neighbors.add(neighbor);
     }
-    
+
     /**
      *
      * @param other The edge for which to search
@@ -591,8 +580,8 @@ class Node {
     public boolean containsNeighbor(Edge other) {
         return this.neighborhood.contains(other);
     }
-    
-        public boolean containsNeighborNode(Node other) {
+
+    public boolean containsNeighborNode(Node other) {
         return this.neighbors.contains(other);
     }
 
@@ -604,8 +593,8 @@ class Node {
     public Edge getNeighbor(int index) {
         return this.neighborhood.get(index);
     }
-    
-      public Neighbor getNeighborNode(int index) {
+
+    public Neighbor getNeighborNode(int index) {
         return this.neighbors.get(index);
     }
 
@@ -617,8 +606,8 @@ class Node {
     Edge removeNeighbor(int index) {
         return this.neighborhood.remove(index);
     }
-    
-       Neighbor removeNeighborNode(int index) {
+
+    Neighbor removeNeighborNode(int index) {
         return this.neighbors.remove(index);
     }
 
@@ -629,8 +618,8 @@ class Node {
     public void removeNeighbor(Edge e) {
         this.neighborhood.remove(e);
     }
-    
-      public void removeNeighborNode(Neighbor e) {
+
+    public void removeNeighborNode(Neighbor e) {
         this.neighbors.remove(e);
     }
 
@@ -642,9 +631,10 @@ class Node {
         return this.neighborhood.size();
     }
 
-       public int getNeighborNodesCount() {
+    public int getNeighborNodesCount() {
         return this.neighbors.size();
     }
+
     /**
      *
      * @return String The label of this Node
@@ -692,13 +682,15 @@ class Node {
     public ArrayList<Edge> getNeighbors() {
         return new ArrayList<Edge>(this.neighborhood);
     }
- public ArrayList<Neighbor> get_Neighbors() {
+
+    public ArrayList<Neighbor> get_Neighbors() {
         return this.neighbors;
     }
-      public ArrayList<Neighbor> getAllNeighbors() {
+
+    public ArrayList<Neighbor> getAllNeighbors() {
         return new ArrayList<Neighbor>(this.neighbors);
     }
-         
+
 }
 
 class Location {
