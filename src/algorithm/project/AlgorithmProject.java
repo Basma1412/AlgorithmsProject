@@ -509,14 +509,25 @@ class Node {
     
     
     public Route findDestination(int destination_id){
-    if(findDestination_Neighbors(this.neighbors,destination_id)==null){
+        
+        Route route=null;
+        
+
+        if(this.neighbors.size()==0){
+        route= null;
+        }else{
+          route=findDestination_Neighbors(this.neighbors,destination_id);
+    if(route==null){
+        
      for(int i=0;i<neighbors.size();i++){
-        return  findDestination_Neighbors(neighbors.get(i).getNode().get_Neighbors(),destination_id);
+        route= findDestination_Neighbors(neighbors.get(i).getNode().get_Neighbors(),destination_id);
      
      }    
     
     }
-    return null;
+        
+        }
+    return route ;
     }
 
     public void broadcast(Message msg) {
@@ -529,7 +540,6 @@ class Node {
     }
 
     public void forward(Message msg) {
-    
     
     }
 
