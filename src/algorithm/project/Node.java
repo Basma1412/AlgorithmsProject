@@ -1,10 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package algorithm.project;
 
+package algorithm.project;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +7,7 @@ import java.util.Map;
 
 class Node {
 
-    private ArrayList<Edge> neighborhood;
+     ArrayList<Edge> neighborhood;
     private ArrayList<Neighbor> neighbors;
      public final Map<String,Route> nodes=new HashMap<String,Route> ();
     private String label;
@@ -21,12 +16,13 @@ class Node {
     double batteryPower;
     double antennaPower;
     boolean visited;
-
+int countvisits;
    
     public Node(String label) {
         this.label = label;
         this.neighborhood = new ArrayList<>();
         this.neighbors = new ArrayList<>();
+        this.countvisits=-1;
     }
 
     public Node(String label, int id, Location location, double batteryPower, double antennaPower, boolean visited) {
@@ -36,6 +32,7 @@ class Node {
         this.location = location;
         this.batteryPower = batteryPower;
         this.antennaPower = antennaPower;
+        this.countvisits=-1;
     }
 
     public int getNodeID() {
@@ -148,8 +145,8 @@ this.nodes.put(label, Routes);
         Route messagepath=findDestination_Neighbors(this.getAllNeighbors(),msg.receiver_id);
         if (messagepath!=null)
         {
-            Node receiver = messagepath.route.pop();
-            receiver.receive(msg, messagepath);
+//            Node receiver = messagepath.route.pop();
+//            receiver.receive(msg, messagepath);
         }
         else 
         {
@@ -162,17 +159,17 @@ this.nodes.put(label, Routes);
         
         int myid=this.id;
         double mypower=route.power;
-        ArrayList<Integer> ids=new ArrayList<>();
+        ArrayList<String> ids=new ArrayList<>();
         for (int i=0 ; i<route.route.size();i++)
         {
-            ids.add(route.route.get(i).id);
+            ids.add(route.route.get(i));
         }
         
             acknowledge(myid,mypower,ids);
         
     }
 
-    public void acknowledge(int myid,double mypower,ArrayList<Integer> ids) {
+    public void acknowledge(int myid,double mypower,ArrayList<String> ids) {
 
         System.out.println("Received by"+myid+" , total power is : "+mypower+" and the path is ");
         
@@ -330,6 +327,3 @@ this.nodes.put(label, Routes);
     }
 
 }
-
-
-

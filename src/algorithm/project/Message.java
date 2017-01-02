@@ -5,10 +5,7 @@
  */
 package algorithm.project;
 
-/**
- *
- * @author taseneem 21
- */
+
 class Message {
 
     int sender_id;

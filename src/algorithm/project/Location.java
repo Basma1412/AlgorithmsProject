@@ -5,10 +5,6 @@
  */
 package algorithm.project;
 
-/**
- *
- * @author taseneem 21
- */
 class Location {
 
     double x;

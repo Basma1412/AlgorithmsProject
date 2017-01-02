@@ -5,23 +5,20 @@
  */
 package algorithm.project;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
-/**
- *
- * @author taseneem 21
- */
 class Route {
 
-    Stack<Node> route;
+    ArrayList<String> route;
     double power;
 
-    public Route(Stack<Node> route, double power) {
+    public Route(ArrayList<String> route, double power) {
         this.route = route;
         this.power = power;
     }
 
-    public Stack<Node> getRoute() {
+    public ArrayList<String> getRoute() {
         return this.route;
     }
 
@@ -33,21 +30,22 @@ class Route {
         this.power = power;
     }
 
-    public void setRoute(Stack<Node> route) {
+    public void setRoute(ArrayList<String> route) {
         this.route = route;
     }
 
-public void addToRoute(Node node) {
-          this.power++;
+    public void addToRoute(String node) {
+        this.power++;
         this.route.add(node);
     }
-public String toString() {
-        String s="Nodes: " ;
-for(int i=0;i<route.size();i++){
-s+=route.get(i).getNodeID();
-s+=",";
 
-}   
-return s;
-}
+    public String toString() {
+        String s = "Nodes: ";
+        for (int i = 0; i < route.size(); i++) {
+            s += route.get(i);
+            s += ",";
+
+        }
+        return s;
+    }
 }
