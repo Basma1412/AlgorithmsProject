@@ -27,7 +27,8 @@ class WorkingArea {
     private ArrayList<Integer> cost;
 //    private ArrayList<double> dist;
 private Random rn;
-    public WorkingArea() {
+public boolean flag=false;    
+public WorkingArea() {
 //       this.nodes = new HashMap<String, Node>();
 //        this.nodes=new ArrayList<Node>();
         this.edges = new HashMap<Integer, Edge>();
@@ -226,6 +227,7 @@ private Random rn;
         boolean found_destination=false;
         route.add(node);
         node.visited = true;
+        flag=true;
         while (!route.isEmpty()) {
             Node element = route.pop();
         found_destination=false;
@@ -234,7 +236,7 @@ private Random rn;
             for (int i = 0; i < neighbours.size(); i++) {
                 temp_power = 0;
                 Node n = neighbours.get(i).getTwo();
-                if (n != null && !n.visited) {
+                if (n != null && ( flag==false || !n.visited ) ) {
                     temp_power += neighbours.get(i).getPower();
                     route.add(n);
                     n.visited = true;
@@ -290,11 +292,16 @@ continue;
 
     
     }
-    public void getAllRoutes(Node src){
-    for (int i=0;i<nodes.size();i++){
     
-        src.setNode_Neighbour(""+nodes.get(""+i).getNodeID(),bestRoute(src, nodes.get(""+i).getNodeID()) );
-         nodes.get(""+i).print();
+    public void getAllRoutes(Node src){
+    for (int i=src.getNodeID()+1;i<nodes.size();i++){
+ flag=false;
+        Route r=bestRoute(src, nodes.get(""+i).getNodeID());
+        src.setNode_Neighbour(""+nodes.get(""+i).getNodeID(),r);
+        nodes.get(""+i).visited=false;
+        nodes.get(""+i).print();
+    
+    
     }
     
     
