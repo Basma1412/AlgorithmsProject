@@ -6,12 +6,15 @@
 package algorithm.project;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 class Node {
 
     private ArrayList<Edge> neighborhood;
     private ArrayList<Neighbor> neighbors;
+     public final Map<String,Route> nodes=new HashMap<String,Route> ();
     private String label;
     int id;
     Location location;
@@ -19,10 +22,7 @@ class Node {
     double antennaPower;
     boolean visited;
 
-    /**
-     *
-     * @param label The unique label associated with this Vertex
-     */
+   
     public Node(String label) {
         this.label = label;
         this.neighborhood = new ArrayList<>();
@@ -42,7 +42,22 @@ class Node {
 
         return id;
     }
-
+    
+    public void print(){
+    
+    //for (int i=0;i<nodes.size();i++){
+      //  System.out.println("the route for node  "+i+"");
+        
+    
+    
+    
+    for (Map.Entry<String, Route> entry : nodes.entrySet()) {
+    System.out.println(entry.getKey()+" : "+entry.getValue());
+}
+    }
+public void setNode_Neighbour(String label,Route Routes){
+this.nodes.put(label, Routes);
+}
     public Location getLocation() {
         return this.location;
     }

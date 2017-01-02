@@ -13,7 +13,7 @@ class Edge {
 
     Node one, two;
     private double power;
-
+ private int weight;
     /**
      *
      * @param one The first vertex in the Edge
@@ -77,8 +77,12 @@ class Edge {
      *
      * @param weight The new power of this Edge
      */
-    public void setWeight(double weight) {
-        this.power = weight;
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+    
+     public int getWeight() {
+       return  this.weight ;
     }
 
     /**

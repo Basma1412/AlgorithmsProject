@@ -23,7 +23,9 @@ class WorkingArea {
 
     public final Map<String,Node> nodes=new HashMap<String, Node>();
     private HashMap<Integer, Edge> edges;
-    private ArrayList<double> dist;
+    private ArrayList<Route> dis=new ArrayList<Route>();
+    private ArrayList<Integer> cost;
+//    private ArrayList<double> dist;
 private Random rn;
     public WorkingArea() {
 //       this.nodes = new HashMap<String, Node>();
@@ -199,11 +201,12 @@ private Random rn;
 
                 if (nodes.get(""+i).inRange(nodes.get(""+j))) {
                     Edge temp = new Edge(nodes.get(""+i), nodes.get(""+j));
+                    temp.setWeight(rn.nextInt(10)+1);
                     nodes.get(""+i).addNeighbor(temp); 
                     System.out.println(temp);
 //                    System.out.println("the neighbour of node "+i+"is :"+nodes.get(""+i).getNeighbor(i));
                             
-                  //  Route bestRoute = bestRoute(nodes.get(""+i), nodes.get(""+j).id);
+            //       Route bestRoute = bestRoute(nodes.get(""+i), nodes.get(""+j).id);
                     //Neighbor n = new Neighbor(nodes.get(""+i),bestRoute);
 //                    nodes.get(""+i).addNeighborNode(n); 
 //                    nodes.get(""+i).addNeighborNode(new Neighbor(nodes.get(""+j), bestRoute));
@@ -213,16 +216,19 @@ private Random rn;
         }
     }
 
+    
     public Route bestRoute(Node node, int id) {
         Stack<Node> route = new Stack<Node>();
+         Stack<Node> final_route = new Stack<>();
+
         double temp_power = 0;
         double route_power = 1000000;
-        Stack<Node> final_route = new Stack<>();
+        boolean found_destination=false;
         route.add(node);
         node.visited = true;
         while (!route.isEmpty()) {
             Node element = route.pop();
-
+        found_destination=false;
             ArrayList<Edge> neighbours = node.getNeighbors();
 
             for (int i = 0; i < neighbours.size(); i++) {
@@ -232,14 +238,21 @@ private Random rn;
                     temp_power += neighbours.get(i).getPower();
                     route.add(n);
                     n.visited = true;
+
                     if (n.id == id) {
+                        found_destination=true;
+                    
+
                         break;
                     }
                 }
             }
 
-            if (temp_power < route_power) {
-                final_route = route;
+            if (temp_power < route_power && found_destination==true) {
+               // final_route = route;
+                 final_route = new Stack<>();
+                          for(int j=0;j<route.size();j++)
+                            final_route.push(route.get(j));
                 route_power = temp_power;
             }
         }
@@ -247,13 +260,43 @@ private Random rn;
         Route path = new Route(final_route, route_power);
         return path;
 
+   /*     for (int i=0; i<nodes.size(); ++i)
+	//dis.add() = Integer.MAX_VALUE;
+        
+	//dis.add(node.getNodeID()) = 0;
+         cost.add(Integer.MAX_VALUE);
+        cost.set(node.getNodeID(),0);
+for(int i=0 ;i<nodes.size();i++){
+ 
+  
+for(int j=0;j<nodes.size();j++){
+   if(i==j)
+continue;
+   else{
+   if (dist[u]!=Integer.MAX_VALUE && cost.get(j)+nodes.get(j).getNeighbors().get(j).getWeight()<dist[v])
+		cost.set(id,cost.get(j)+nodes.get(j).getNeighbors().get(j).getWeight());
+			}
+
+   }
+}
+}*/        
+        
     }
     
     public void BellmanFord(int scr){
-    for (int i=0; i<nodes.size(); ++i)
-			dist[i] = Integer.MAX_VALUE;
-		dist[src] = 0;
+    //for (int i=0; i<nodes.size(); ++i)
+//			dist[i] = Integer.MAX_VALUE;
+//		dist[src] = 0;
 
+    
+    }
+    public void getAllRoutes(Node src){
+    for (int i=0;i<nodes.size();i++){
+    
+        src.setNode_Neighbour(""+nodes.get(""+i).getNodeID(),bestRoute(src, nodes.get(""+i).getNodeID()) );
+         nodes.get(""+i).print();
+    }
+    
     
     }
     
@@ -286,8 +329,12 @@ private Random rn;
     }
     
     initializeNeighbors();
-    
-    //Route path;
+       for(int i=0;i<nodes.size();i++){
+           getAllRoutes(nodes.get(""+i));
+       
+       }
+
+//Route path;
     //for(int j=0; j <nodes.size() ;j++){
     //path=bestRoute(nodes.get(j), nodes.get(j).getNodeID());
        // System.out.println("the path is "+path.route.toString());
