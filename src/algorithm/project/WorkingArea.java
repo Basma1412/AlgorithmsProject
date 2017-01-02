@@ -169,9 +169,11 @@ class WorkingArea {
             String d_id=node.neighborhood.get(i).two.getNodeID()+"";
             if (d_id.equals(destination_id))
             {
-                power=1;
+                neighbor=true;
+                power=2;
                 output+=node.getNodeID()+"";
                 dest_found=true;
+                break;
             }
         }
         if(!neighbor)
