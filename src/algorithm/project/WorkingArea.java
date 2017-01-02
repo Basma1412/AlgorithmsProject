@@ -158,16 +158,32 @@ class WorkingArea {
 //
 //    }
 
-    public void dfsUsingStack(Node node,String destination_id) {
-        Stack<String> ids = new Stack<String>();
+    public void printRoute(Node node,String destination_id) {
+        
+        boolean neighbor=false;
+         String output="";
+            boolean dest_found=false;
+           int power=0;
+        for (int i = 0 ; i<node.neighborhood.size();i++)
+        {
+            String d_id=node.neighborhood.get(i).two.getNodeID()+"";
+            if (d_id.equals(destination_id))
+            {
+                power=1;
+                output+=node.getNodeID()+"";
+                dest_found=true;
+            }
+        }
+        if(!neighbor)
+        { Stack<String> ids = new Stack<String>();
         ids.add(node.getNodeID() + " , ");
         node.visited = true;
         node.countvisits++;
-        boolean dest_found=false;
-        String output="";
+     
         while (!ids.isEmpty()) {
             String element = ids.pop();
               output+=(element + "\t");
+              power++;
             if (element.equals(destination_id))
             {
                 dest_found=true;
@@ -185,10 +201,11 @@ class WorkingArea {
                 }
             }
 
-        }
+        }}
         if (dest_found)
         {
-               System.out.print(output);
+               System.out.println(output);
+               System.out.println("The needed power is "+(power-1));
         }
         else 
         {
@@ -240,10 +257,12 @@ class WorkingArea {
 
         initializeNeighbors();
       
+      
+        
         int node_id=0;
         String dest=("2");
         
-            dfsUsingStack(nodes.get(node_id),dest);
+            printRoute(nodes.get(node_id),dest);
           
 
         int old_id = 0;
