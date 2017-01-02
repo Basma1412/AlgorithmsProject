@@ -85,7 +85,9 @@ class WorkingArea {
         for (int i = 0; i < nodes.size() - 1; i++) {
             for (int j = 0; j < nodes.size(); j++) {
 
-                if (i==j)continue;
+                if (i == j) {
+                    continue;
+                }
                 Node current = nodes.get(i);
 
                 Node current2 = nodes.get(j);
@@ -157,60 +159,117 @@ class WorkingArea {
 //        return path;
 //
 //    }
+    public RouteandPower loopforneighbors(Node node, String destination_id) {
+        ArrayList<Edge> neighbours = node.getNeighbors();
+        RouteandPower routeandpower = new RouteandPower("", 10000000);
+        boolean found = false;
+        for (int i = 0; i < neighbours.size(); i++) {
+            Node n = neighbours.get(i).two;
+            RouteandPower temp = checkmyneighbors(n, destination_id);
 
-    public void printRoute(Node node,String destination_id) {
-        
-        boolean neighbor=false;
-         String output="";
-            boolean dest_found=false;
-           int power=0;
-        for (int i = 0 ; i<node.neighborhood.size();i++)
-        {
-            String d_id=node.neighborhood.get(i).two.getNodeID()+"";
-            if (d_id.equals(destination_id))
-            {
-                neighbor=true;
-                power=2;
-                output+=node.getNodeID()+"";
-                dest_found=true;
-                break;
-            }
-        }
-        if(!neighbor)
-        { Stack<String> ids = new Stack<String>();
-        ids.add(node.getNodeID() + " , ");
-        node.visited = true;
-        node.countvisits++;
-     
-        while (!ids.isEmpty()) {
-            String element = ids.pop();
-              output+=(element + "\t");
-              power++;
-            if (element.equals(destination_id))
-            {
-                dest_found=true;
-                break;
-              
-            }
-         
-            ArrayList<Edge> neighbours = node.getNeighbors();
-            for (int i = 0; i < neighbours.size(); i++) {
-                Node n = neighbours.get(i).two;
-                if (n != null&& !n.visited) {
-                    ids.add(n.getNodeID() +"");
-                    n.visited = true;
-                    n.countvisits++;
+            if (temp != null) {
+                if (temp.power < routeandpower.power) {
+                    routeandpower = temp;
+                    found = true;
                 }
             }
 
-        }}
-        if (dest_found)
-        {
-               System.out.println(output);
-               System.out.println("The needed power is "+(power-1));
         }
-        else 
-        {
+
+        if (!found) {
+            routeandpower=new RouteandPower("", 10000000);
+
+        } else {
+            return routeandpower;
+        }
+    }
+
+    public RouteandPower checkmyneighbors(Node node, String destination_id) {
+        RouteandPower randp;
+        boolean neighbor = false;
+        String output = "";
+        boolean dest_found = false;
+        double power = 0;
+        for (int i = 0; i < node.neighborhood.size(); i++) {
+            String d_id = node.neighborhood.get(i).two.getNodeID() + "";
+            if (d_id.equals(destination_id)) {
+                neighbor = true;
+                power++;
+                output += node.getNodeID() + "";
+                dest_found = true;
+                break;
+            }
+        }
+
+        if (dest_found) {
+            randp = new RouteandPower(output, power);
+            return randp;
+        } else {
+            return null;
+        }
+
+    }
+
+    public void printRoute(Node node, String destination_id) {
+
+        boolean neighbor = false;
+        String output = "";
+        boolean dest_found = false;
+        double power = 0;
+        for (int i = 0; i < node.neighborhood.size(); i++) {
+            String d_id = node.neighborhood.get(i).two.getNodeID() + "";
+            if (d_id.equals(destination_id)) {
+                neighbor = true;
+                power = 2;
+                output += node.getNodeID() + "";
+                dest_found = true;
+                break;
+            }
+        }
+        if (!neighbor) {
+            
+           
+            RouteandPower r = loopforneighbors(node, destination_id);
+            output=r.output;
+            power =r.power;
+            if (power>=100000)
+            {
+                dest_found=false;
+            }
+            
+        }
+
+//        Stack<String> ids = new Stack<String>();
+//        ids.add(node.getNodeID() + " , ");
+//        node.visited = true;
+//        node.countvisits++;
+//     
+//        while (!ids.isEmpty()) {
+//            String element = ids.pop();
+//              output+=(element + "\t");
+//              power++;
+//            if (element.equals(destination_id))
+//            {
+//                dest_found=true;
+//                break;
+//              
+//            }
+//         
+//            ArrayList<Edge> neighbours = node.getNeighbors();
+//            for (int i = 0; i < neighbours.size(); i++) {
+//                Node n = neighbours.get(i).two;
+//                if (n != null&& !n.visited) {
+//                    ids.add(n.getNodeID() +"");
+//                    n.visited = true;
+//                    n.countvisits++;
+//                }
+//            }
+//
+//        }
+        if (dest_found) {
+            System.out.println(output);
+            System.out.println("The needed power is " + (power - 1));
+        } else {
             System.out.println("No way to reach the needed destination");
         }
     }
@@ -258,14 +317,11 @@ class WorkingArea {
         }
 
         initializeNeighbors();
-      
-      
-        
-        int node_id=0;
-        String dest=("2");
-        
-            printRoute(nodes.get(node_id),dest);
-          
+
+        int node_id = 0;
+        String dest = ("2");
+
+        printRoute(nodes.get(node_id), dest);
 
         int old_id = 0;
         Message m[] = new Message[1000];
