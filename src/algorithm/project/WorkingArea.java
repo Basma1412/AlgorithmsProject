@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
@@ -21,6 +23,7 @@ class WorkingArea {
     public boolean flag = false;
 
     public WorkingArea() {
+        this.queue = new LinkedList<Integer>();
 //       this.nodes = new HashMap<String, Node>();
 //        this.nodes=new ArrayList<Node>();
         this.edges = new HashMap<Integer, Edge>();
@@ -34,6 +37,7 @@ class WorkingArea {
      * @param vertices The initial Vertices to populate this Graph
      */
     public WorkingArea(ArrayList<Node> vertices) {
+        this.queue = new LinkedList<Integer>();
 
         this.nodes = vertices;
 
@@ -159,6 +163,51 @@ class WorkingArea {
 //        return path;
 //
 //    }
+    private Queue<Integer> queue;
+
+    public void bfs(Node node, int destination_id) {
+
+        String output = "";
+        boolean dest_found = false;
+        double power = 0;
+        int ii = node.getNodeID();
+        queue.add(ii);
+        node.visited = true;
+        if (node.getNodeID()==destination_id)
+        {
+            power=0;
+            output+=destination_id+" ";
+        }
+      else
+        {while (!queue.isEmpty()) {
+
+            int element = queue.remove();
+            output += (element + "     ");
+            if (element == destination_id) {
+                dest_found = true;
+                break;
+
+            }
+            ArrayList<Edge> neighbours = node.getNeighbors();
+            for (int i = 0; i < neighbours.size(); i++) {
+                Node n = neighbours.get(i).two;
+                if (n != null && !n.visited) {
+                    queue.add(n.getNodeID());
+                    n.visited = true;
+
+                }
+            }
+
+        }
+        }
+        if (dest_found) {
+            System.out.println(" The route is " + output);
+        } else {
+
+            System.out.println(" No route could  be found");
+        }
+    }
+
     public RouteandPower loopforneighbors(Node node, String destination_id) {
         ArrayList<Edge> neighbours = node.getNeighbors();
         RouteandPower routeandpower = new RouteandPower("", 10000000);
@@ -177,12 +226,11 @@ class WorkingArea {
         }
 
         if (!found) {
-            routeandpower=new RouteandPower("", 10000000);
+            routeandpower = new RouteandPower("", 10000000);
 
-        } 
-            return routeandpower;
         }
-    
+        return routeandpower;
+    }
 
     public RouteandPower checkmyneighbors(Node node, String destination_id) {
         RouteandPower randp;
@@ -227,16 +275,14 @@ class WorkingArea {
             }
         }
         if (!neighbor) {
-            
-           
+
             RouteandPower r = loopforneighbors(node, destination_id);
-            output=r.output;
-            power =r.power;
-            if (power>=100000)
-            {
-                dest_found=false;
+            output = r.output;
+            power = r.power;
+            if (power >= 100000) {
+                dest_found = false;
             }
-            
+
         }
 
 //        Stack<String> ids = new Stack<String>();
@@ -319,9 +365,11 @@ class WorkingArea {
         initializeNeighbors();
 
         int node_id = 0;
-        String dest = ("2");
+        String dest = ("5");
+//
+//        printRoute(nodes.get(node_id), dest);
 
-        printRoute(nodes.get(node_id), dest);
+        bfs(nodes.get(node_id),3);
 
         int old_id = 0;
         Message m[] = new Message[1000];
