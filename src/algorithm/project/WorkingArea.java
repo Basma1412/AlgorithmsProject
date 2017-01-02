@@ -179,10 +179,10 @@ class WorkingArea {
         if (!found) {
             routeandpower=new RouteandPower("", 10000000);
 
-        } else {
+        } 
             return routeandpower;
         }
-    }
+    
 
     public RouteandPower checkmyneighbors(Node node, String destination_id) {
         RouteandPower randp;
